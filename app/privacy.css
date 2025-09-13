@@ -1,0 +1,188 @@
+/* Privacy page styles for Earthilians
+   Paste this into your global stylesheet or a page-specific CSS module.
+   Matches the dark theme used across the site and targets the classes in your JSX.
+*/
+
+/* Theme tokens — tweak to match site palette */
+:root {
+  --bg: #0f0f10;
+  --panel: #141516;
+  --muted: #98a0a6;
+  --text: #e6e9eb;
+  --accent: #4ea3ff;
+  --success: #9fe3b5;
+  --danger: #ffb4b4;
+  --radius: 10px;
+  --max-width: 880px;
+  --content-padding: 28px;
+}
+
+/* Page container */
+.page.container {
+  max-width: var(--max-width);
+  margin: 28px auto;
+  padding: 0 var(--content-padding);
+  color: var(--text);
+  box-sizing: border-box;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Page header */
+.page-head {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.page-head h1 {
+  font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+  margin: 0;
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.muted {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Section groups */
+.page > section {
+  margin: 20px 0;
+  padding: 14px 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.005), rgba(0,0,0,0.02));
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,255,255,0.02);
+}
+.page > section h2 {
+  margin: 0 0 10px 0;
+  font-size: 1.03rem;
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* Paragraphs and lists inside sections */
+.page p {
+  margin: 0 0 12px 0;
+  color: rgba(230,233,235,0.95);
+  font-size: 0.98rem;
+}
+.page ul {
+  margin: 0 0 12px 18px;
+  padding: 0;
+  color: rgba(230,233,235,0.95);
+}
+.page li {
+  margin: 6px 0;
+  font-size: 0.98rem;
+}
+
+/* Links */
+.page a,
+.page a:visited {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color .12s ease, text-decoration .12s ease;
+}
+.page a:hover,
+.page a:focus {
+  text-decoration: underline;
+  outline: none;
+}
+
+/* Inline strong */
+.page strong { color: var(--text); font-weight: 700; }
+
+/* Footer of the page */
+.page-foot {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.02);
+}
+.page-foot p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+
+/* Code and pre blocks (if any) */
+.page code,
+.page pre {
+  background: rgba(255,255,255,0.02);
+  color: #dbeafe;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+  font-size: 0.92rem;
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+.page pre {
+  padding: 12px;
+  overflow: auto;
+}
+
+/* Blockquote */
+.page blockquote {
+  margin: 8px 0;
+  padding: 10px 14px;
+  border-left: 3px solid rgba(78,163,255,0.12);
+  background: rgba(78,163,255,0.02);
+  color: var(--muted);
+  border-radius: 8px;
+}
+
+/* Accessibility: focus ring for links and buttons */
+.page a:focus,
+.page button:focus,
+.page input:focus,
+.page textarea:focus {
+  box-shadow: 0 0 0 4px rgba(78,163,255,0.08);
+  border-radius: 8px;
+  outline: none;
+}
+
+/* Responsive tweaks */
+@media (max-width: 880px) {
+  .page.container {
+    margin: 18px auto;
+    padding: 0 18px;
+  }
+
+  .page > section {
+    padding: 12px;
+  }
+
+  .page-head h1 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Print-friendly */
+@media print {
+  :root {
+    --text: #000;
+    --muted: #333;
+  }
+  .page.container {
+    color: #000;
+    background: #fff;
+    padding: 0;
+    max-width: 100%;
+  }
+  .page > section { background: transparent; border: none; padding: 0; }
+  .page-head h1 { color: #000; }
+  .page-foot { display: none; }
+}
+
+/* Small utility classes you might use */
+.kv { display:flex; gap:12px; align-items:flex-start; }
+.kv .k { color: var(--muted); font-weight:600; min-width:140px; }
+.kv .v { color: var(--text); }
+
+/* Error / success text */
+.text-success { color: var(--success); }
+.text-error { color: var(--danger); }
+
+/* End of privacy page CSS */

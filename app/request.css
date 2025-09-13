@@ -1,0 +1,119 @@
+/* Request Indexing Page — Earthilians */
+
+/* Container */
+.page.container {
+  max-width: 720px;
+  margin: 28px auto;
+  padding: 0 28px;
+  color: #e6e9eb;
+  line-height: 1.6;
+}
+
+/* Header */
+.page-head {
+  margin-bottom: 22px;
+}
+.page-head h1 {
+  font-size: clamp(1.6rem, 2.5vw, 2.1rem);
+  font-weight: 700;
+  margin: 0;
+}
+.page-head .muted {
+  color: #98a0a6;
+  font-size: 1rem;
+}
+
+/* Sections */
+.page > section {
+  margin: 20px 0;
+  padding: 20px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.02));
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 10px;
+}
+.page > section h2 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #e6e9eb;
+}
+.page > section p {
+  margin-bottom: 12px;
+  font-size: 0.97rem;
+  color: rgba(230,233,235,0.95);
+}
+
+/* Form */
+.request-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 10px;
+}
+.request-form label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e6e9eb;
+}
+.request-form input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: #141516;
+  color: #e6e9eb;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.request-form input:focus {
+  border-color: #4ea3ff;
+  box-shadow: 0 0 0 3px rgba(78,163,255,0.15);
+}
+.request-form button {
+  background: #4ea3ff;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.request-form button:hover {
+  background: #3890e0;
+  transform: translateY(-1px);
+}
+.request-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Status Messages */
+.form-msg {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.form-msg.success {
+  background: rgba(63, 191, 127, 0.1);
+  color: #9fe3b5;
+  border: 1px solid rgba(63, 191, 127, 0.3);
+}
+.form-msg.error {
+  background: rgba(255, 100, 100, 0.1);
+  color: #ffb4b4;
+  border: 1px solid rgba(255, 100, 100, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  .page.container {
+    padding: 0 18px;
+  }
+  .request-form button {
+    width: 100%;
+  }
+}

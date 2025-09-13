@@ -1,0 +1,86 @@
+/* About page styles for Earthilians (dark theme, same as Privacy/Terms) */
+
+.page.container {
+  max-width: 880px;
+  margin: 28px auto;
+  padding: 0 28px;
+  color: #e6e9eb;
+  line-height: 1.6;
+}
+
+/* Header */
+.page-head {
+  margin-bottom: 18px;
+}
+.page-head h1 {
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 700;
+  margin: 0;
+  color: #e6e9eb;
+}
+.muted {
+  color: #98a0a6;
+  font-size: 0.95rem;
+}
+
+/* Section cards */
+.page > section {
+  margin: 20px 0;
+  padding: 16px 18px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.01),
+    rgba(0, 0, 0, 0.02)
+  );
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+.page > section h2 {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #e6e9eb;
+}
+.page > section p,
+.page > section ul {
+  font-size: 0.98rem;
+  color: rgba(230, 233, 235, 0.95);
+  margin-bottom: 12px;
+}
+
+/* Lists */
+.page ul {
+  margin: 0 0 12px 18px;
+  padding: 0;
+}
+.page li {
+  margin: 6px 0;
+}
+
+/* Links */
+.page a {
+  color: #4ea3ff;
+  text-decoration: none;
+}
+.page a:hover {
+  text-decoration: underline;
+}
+
+/* Footer */
+.page-foot {
+  margin-top: 24px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.02);
+  font-size: 0.92rem;
+  color: #98a0a6;
+}
+
+/* Responsive */
+@media (max-width: 880px) {
+  .page.container {
+    padding: 0 18px;
+  }
+  .page > section {
+    padding: 14px;
+  }
+}

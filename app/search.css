@@ -1,0 +1,785 @@
+/* Polished dark-first UI with nicer alignment, softer borders, smaller favicons,
+   removed the white outer border, and better visual hierarchy. */
+
+/* === Theme tokens === */
+:root{
+  --bg-0: #171718;            /* deep page background (dark-first) */
+  --bg-1: #171718;            /* slightly darker for edges */
+  --surface: #0f1724;         /* cards & search bar background */
+  --muted: #9aa6bb;           /* muted text */
+  --text: #e6eef8;            /* main text */
+  --accent: #3b82f6;          /* main accent */
+  --accent-2: #7c5cff;        /* secondary accent for gradients */
+  --glass: rgba(255,255,255,0.02);
+  --card-shadow: 0 10px 30px rgba(34, 34, 34, 0.6);
+  --soft-border: rgba(255,255,255,0.03);
+  --radius: 12px;
+  --gap: 14px;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Light-mode fallback (optional) */
+@media (prefers-color-scheme: light) {
+  :root{
+    --bg-0: #f6f8fb;
+    --bg-1: #eef2ff;
+    --surface: #ffffff;
+    --muted: #64748b;
+    --text: #071029;
+    --accent: #2563eb;
+    --accent-2: #4f46e5;
+    --glass: rgba(2,6,23,0.03);
+    --card-shadow: 0 8px 26px rgba(15,23,42,0.06);
+    --soft-border: rgba(2,6,23,0.04);
+  }
+}
+
+/* === Global resets / remove outer white border === */
+html, body {
+  height: 100%;
+  margin: 0;
+  background: linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 100%);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* { box-sizing: border-box; }
+
+/* Remove any outline container whites — target common root wrappers */
+#__next, .hp-root {
+  background: transparent;
+}
+
+/* === Root layout (centered container with nice padding) === */
+.hp-root {
+  min-height: 100vh;
+  padding: 36px 20px;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  align-items: center; /* center the page card */
+}
+
+/* Constrain content width and align everything precisely */
+.hp-container {
+  width: 100%;
+  max-width: 1150px;
+}
+
+/* === Header: improved baseline alignment === */
+.hp-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end; /* baseline for brand + control */
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.hp-brand {
+  display:flex;
+  gap: 12px;
+  align-items:center;
+}
+
+.hp-spark {
+  width: 100px;
+  height: 100px;
+  display: inline-grid;
+  place-items: center;
+
+  /* force sharp scaling */
+  image-rendering: crisp-edges;   /* Chrome / Safari */
+
+  /* shadow for depth */
+  filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.85));
+}
+
+
+.hp-brand-texts h1 {
+  margin:0;
+  font-size:20px;
+  font-weight:700;
+  line-height:1;
+}
+.hp-brand-texts p {
+  margin:4px 0 0;
+  font-size:13px;
+  color:var(--muted);
+}
+
+/* keep controls on same baseline as brand text */
+.hp-controls { display:flex; align-items:center; gap:10px; color:var(--muted); font-size:13px; }
+
+
+
+.hp-search-row {
+  display:flex;
+  align-items:center;
+  gap: 12px;
+  background: rgba(255,255,255,0.02);
+  padding: 12px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.02); /* very subtle */
+}
+
+
+
+
+
+/* small stats row aligned to left under search */
+.hp-meta {
+  margin-top:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* === Suggestions dropdown (if visible) === */
+.hp-suggestions {
+  margin-top: 10px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.02);
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.015));
+  box-shadow: 0 12px 40px rgba(2,6,23,0.6);
+}
+.hp-sugg { padding:12px 14px; text-align:left; border:none; width:100%; background:transparent; cursor:pointer; }
+.hp-sugg:hover, .hp-sugg.active { background: rgba(124,92,255,0.04); }
+.hp-sugg-title { font-weight:700; color:var(--text); }
+.hp-sugg-desc { color:var(--muted); margin-top:6px; font-size:13px; }
+
+/* === Results grid: equalized card heights, tighter spacing === */
+.hp-results { margin-top: 16px; }
+
+/* Favicon reduced size (smaller and aligned) */
+.hp-fav {
+  width:44px;
+  height:44px;
+  border-radius:8px;
+  flex-shrink:0;
+  object-fit:cover;
+  background: rgba(255,255,255,0.02);
+  display:block;
+  margin-top:4px; /* aligns better with title baseline */
+}
+
+/* Make card content use all available width and align cleanly */
+.hp-body {
+  flex:1;
+  min-width:0; /* allow truncation */
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+/* titles and spacing — bolder and slightly larger */
+.hp-title {
+  font-size:16px;
+  font-weight:700;
+  color: white;
+  text-decoration:none;
+  display:block;
+    -webkit-line-clamp:1;
+}
+
+/* description a little lighter and slightly bigger for readability */
+.hp-desc {
+  margin-top:6px;
+  font-size:12px;
+  color: rgb(151, 151, 151);
+  line-height:1.45;
+  display:-webkit-box;
+  -webkit-line-clamp:1;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+/* footer: keep open button flush right, id muted and subtle */
+.hp-footer {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top:8px;
+  color:rgb(84, 84, 84);
+  font-size:10px;
+}
+.hp-id {
+  font-size:8px;
+}
+.hp-open {
+  color: rgba(133, 133, 133, 0.85);
+  font-weight:700;
+  background: transparent;
+  border:none;
+  cursor:pointer;
+  padding:6px 8px;
+  border-radius:8px;
+}
+.hp-open:hover { background: rgba(59,130,246,0.04); }
+
+/* === Pagination, loading === */
+.hp-pagination { margin-top:20px; text-align:center; }
+.hp-page {
+  padding:8px 12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.02);
+  background: transparent;
+  color: var(--text);
+  cursor:pointer;
+  margin: 0 6px;
+}
+.hp-page.active {
+  background: conic-gradient(
+    from 0deg,
+    rgba(255,107,107,0.85),
+    rgba(255,107,107,0.6) 25%,
+    rgba(255,107,107,0.85) 50%,
+    rgba(255,107,107,0.85) 75%,
+    rgba(255,107,107,0.85) 100%
+  );  color:#fff;
+  border:none;
+}
+
+
+/* ---------- Simple polished search card ---------- */
+
+.hp-search-card {
+  width: 100%;
+  margin: 8px 0 28px;
+  position: relative;
+}
+
+/* container row */
+.hp-search-row.simple {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  height: 64px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+  border: 1px solid rgba(255,255,255,0.03);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.55);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  position: relative;
+  z-index: 1;
+  transition: box-shadow .18s ease, transform .14s ease;
+border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* small center glow — subtle animation */
+.hp-search-row.simple::after {
+  content: "";
+  position: absolute;
+  left: 30%;
+  right: 28%;
+  top: 10%;
+  bottom: 10%;
+  border-radius: 999px;
+  background: radial-gradient(ellipse at center, rgba(124,92,255,0.06), rgba(59,130,246,0.02) 35%, transparent 60%);
+  pointer-events: none;
+  filter: blur(12px);
+  opacity: 0.95;
+  animation: subtlePulse 6s ease-in-out infinite;
+}
+
+/* icon container (left) */
+.hp-search-left {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.02);
+}
+
+/* search svg color */
+.hp-search-ico { width: 18px; height: 18px; color: rgba(255,255,255,0.72); }
+
+/* input (fills remaining space) */
+.hp-input-simple {
+  flex: 1 1 auto;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: rgba(255,255,255,0.65);
+  font-size: 16px;
+  font-weight: 400;
+  padding: 10px 12px;
+  height: 100%;
+  min-width: 0; /* allows truncation on small screens */
+  
+}
+
+/* placeholder: toned down, mature */
+.hp-input-simple::placeholder {
+  color: rgba(255,255,255,0.32);
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+
+
+/* suggestions — simple dropdown */
+.hp-suggestions.simple {
+  margin-top: 10px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.03);
+  background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+  box-shadow: 0 12px 40px rgba(0,0,0,0.65);
+  z-index: 5;
+  animation: slideDown .14s ease;
+}
+
+/* suggestion item */
+.hp-sugg {
+  width: 100%;
+  text-align: left;
+  padding: 12px 14px;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  display: block;
+}
+.hp-sugg + .hp-sugg { border-top: 1px solid rgba(255,255,255,0.01); }
+
+.hp-sugg-title { font-weight: 700; font-size: 14px; color: var(--text); }
+.hp-sugg-desc { font-size: 13px; color: rgba(255,255,255,0.45); margin-top: 6px; }
+
+/* active state */
+.hp-sugg:hover, .hp-sugg.active { background: rgba(124,92,255,0.035); }
+
+/* meta row below */
+.hp-meta { margin-top: 12px; display:flex; justify-content:space-between; color: rgba(255,255,255,0.38); font-size:13px; }
+
+/* smaller fav/spacing for mobile */
+@media (max-width: 680px) {
+  .hp-search-row.simple { height: 56px; padding: 8px 10px; }
+  .hp-search-left { width: 44px; height: 44px; min-width:44px; }
+  .hp-search-btn.simple { width: 46px; height: 46px; min-width:46px; }
+  .hp-input-simple { font-size: 15px; padding: 8px 10px; }
+}
+
+/* subtle animations */
+@keyframes subtlePulse {
+  0% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 0.98; transform: scale(1.01); }
+  100% { opacity: 0.85; transform: scale(1); }
+}
+@keyframes slideDown {
+  from { transform: translateY(-6px); opacity:0; }
+  to { transform: translateY(0); opacity:1; }
+}
+
+/* small spinner style (framer icon) */
+/* .hp-spin { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.hp-loading { text-align:center; color:var(--muted); padding:14px; } */
+
+/* Smooth spin animation */
+.hp-spin {
+  animation: hp-spin 0.9s linear infinite;
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.5;
+  color: var(--accent, #f97316); /* fallback orange if accent not set */
+}
+
+@keyframes hp-spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.hp-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;                 /* space between icon and text */
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 18px 0;
+  opacity: 0.9;
+  letter-spacing: 0.3px;
+}
+
+
+/* Rotating halo button - circular with animated conic halo */
+.hp-rotate-btn {
+  margin-right: -11.5px;
+  position: relative;
+  width: 63px;
+  height: 63px;
+  min-width: 52px;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF9F43 100%);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  overflow: visible; /* show halo outside */
+  box-shadow: 0 8px 24px rgba(59,130,246,0.12);
+  transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+}
+
+/* the rotating halo — uses ::before so it doesn't affect layout */
+.hp-rotate-btn::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 999px;
+  background: conic-gradient(
+    from 0deg,
+    rgba(255,107,107,0.85),
+    rgba(255,107,107,0.6) 25%,
+    rgba(255,159,67,0.6) 50%,
+    rgba(255,159,67,0.35) 75%,
+    rgba(255,107,107,0.25) 100%
+  );
+  filter: blur(10px) saturate(140%);
+  opacity: 0.65;
+  z-index: 0;
+  pointer-events: none;
+  animation: hp-rotate-halo 4s linear infinite;
+  transform-origin: center center;
+}
+
+/* inner solid circle sits above halo */
+.hp-rotate-btn > svg,
+.hp-rotate-btn .hp-btn-loader {
+  position: relative;
+  z-index: 2; /* above halo */
+}
+
+/* hover and active interactions */
+.hp-rotate-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 18px 40px rgba(59,130,246,0.18);
+  filter: saturate(115%);
+}
+.hp-rotate-btn:active {
+  transform: translateY(0) scale(0.995);
+}
+
+
+
+/* small subtle nudge on hover */
+.hp-rotate-btn:hover .hp-btn-arrow {
+  transform: translateX(4px) scale(1.03);
+}
+
+/* loader style (keeps halo rotating while loading) */
+.hp-btn-loader {
+  width: 18px;
+  height: 18px;
+  color: #fff;
+  animation: spin 1s linear infinite;
+  opacity: 0.95;
+}
+
+/* keep halo running even if button disabled (so it always looks alive) */
+.hp-rotate-btn.loading::before,
+.hp-rotate-btn::before {
+  animation-play-state: running;
+}
+
+/* if button is disabled, tone it down slightly but keep halo */
+.hp-rotate-btn[disabled] {
+  opacity: 0.95;
+  cursor: not-allowed;
+  filter: grayscale(0.05) contrast(0.95);
+}
+
+/* rotation animation for halo */
+@keyframes hp-rotate-halo {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* spinner keyframe (used by Loader2 icon) */
+@keyframes spin { to { transform: rotate(360deg); } }
+
+
+.hp-btn-arrow {
+  width: 22px;
+  height: 22px;
+  color: #fff;
+  transition: transform .18s ease, opacity .18s ease;
+}
+
+a {
+  all: unset;              /* removes all default user-agent styles */
+  display: inline;         /* reset so it still behaves like a normal link */
+  cursor: pointer;         /* keep pointer on hover */
+  text-decoration: underline; /* always underline */
+  color: inherit;          /* inherit text color from parent */
+}
+.hp-url { font-size:11px; color:grey; margin-top:2px; }
+
+
+
+/* Grid of cards */
+.hp-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 20px;
+  margin: 18px 0 40px;
+}
+
+/* CARD AS GRID:
+   column 1 = favicon (fixed width),
+   column 2 = top small-links row + content row
+   rows: row1 fixed to fav height, row2 auto for title+desc
+*/
+.hp-card {
+  display: grid;
+  grid-template-columns: 44px 1fr;   /* left for favicon, right for content */
+  grid-template-rows: 44px auto;     /* row1 = fav height (top links), row2 = title+desc */
+  gap: 12px 14px;
+  padding: 12px 16px;
+  /* background: var(--card-bg); */
+  /* border-radius: var(--radius); */
+  /* box-shadow: var(--card-shadow); */
+  /* border: 1px solid rgba(255,255,255,0.02); */
+  /* transition: transform .12s ease, box-shadow .12s ease; */
+  align-items: start;
+  min-height: 92px;
+}
+
+/* favicon: place in column 1 row 1, align top-left */
+.hp-fav-small {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* link rows: placed in column 2, row 1 (same row as favicon) */
+.hp-link-rows {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* center the two links vertically within the row */
+  gap: 2px;
+  min-width: 0; /* important for ellipsis */
+  overflow: hidden;
+}
+
+/* small link common styles */
+.hp-small-link {
+  color: var(--muted);
+  font-size: 0.70rem;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  max-width: 100%;
+}
+/* small link common styles */
+.hp-small-link-Title {
+  color: white;
+  font-size: 1.1rem;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* first and second line style tweaks */
+.hp-link-line1 { font-weight: 600; }
+.hp-link-line2 { font-weight: 400; color: rgba(158,170,185,0.85); }
+
+.hp-small-link:hover, .hp-small-link:focus {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+/* CONTENT area (title+desc) placed in column 2 row 2 */
+.hp-content {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+/* title & desc */
+.hp-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color:     rgba(255, 118, 103, 0.85);
+  text-decoration: none;
+  line-height: 1.18;
+  display: block;
+  overflow-wrap: anywhere;
+  margin: 0; /* ensure no extra gap */
+  margin-left: -55px;
+}
+.hp-title:hover, .hp-title:focus { color: var(--accent); text-decoration: underline; }
+
+/* clamped description */
+.hp-desc {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+    margin-left: -55px;
+    max-width: 700px;
+}
+
+/* footer */
+.hp-footer { margin-top: 4px; }
+.hp-id { color: rgba(158,170,185,0.75); font-size: 0.78rem;     margin-left: -55px; }
+
+/* hover lift */
+
+/* responsive */
+@media (max-width: 980px) {
+  .hp-grid { grid-template-columns: 1fr; gap: 14px; }
+  .hp-card { grid-template-columns: 40px 1fr; grid-template-rows: 40px auto; }
+  .hp-fav-small { width: 40px; height: 40px; }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .hp-card { transition: none; transform: none; }
+}
+
+/* Footer: keep it in flow, but when space available it will sit at viewport bottom
+   because the main area above consumes remaining space. */
+.site-footer {
+  margin-top: auto;             /* pushes footer to bottom when possible */
+  margin-bottom: -30px;
+  /* visual styling (adjust to your theme tokens) */
+  background: rgba(11,11,12,0.00); /* keep transparent if desired */
+  color: var(--muted, #98a0a6);
+  border-top: 1px solid rgba(255,255,255,0.03);
+  padding: 0px 16px;
+  box-sizing: border-box;
+
+  /* safe-area for mobile (iPhone) */
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+}
+
+/* If you want the footer to be slightly separated from content on very short pages */
+.body-with-gap .site-footer {
+  padding-top: 18px;
+}
+
+/* Optional: subtle elevated look (keeps it unobtrusive) */
+.site-footer {
+  backdrop-filter: none; /* disable unless you want blur */
+  transition: background-color .12s ease, box-shadow .12s ease;
+}
+
+/* Responsive: small screens stack nicely */
+@media (max-width: 740px) {
+  .site-footer {
+    padding: 12px 12px;
+    text-align: center;
+  }
+}
+
+/* Accessibility focus ring for footer links */
+.site-footer a:focus {
+  outline: 3px solid rgba(78,163,255,0.12);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+
+
+/* Row layout: links + spacer + copy */
+.footer-row {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+  justify-content: center; /* center by default */
+}
+
+/* Footer links: small, muted, subtle hover */
+.footer-links {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.footer-links a {
+  color: var(--muted);
+  text-decoration: none;
+  padding: 6px 4px;
+  border-radius: 6px;
+  transition: color .12s ease, background .12s ease, transform .08s ease;
+  font-weight: 500;
+  font-size: 13px;
+}
+.footer-links a:hover,
+.footer-links a:focus {
+  color: var(--text);
+  text-decoration: underline;
+  background: rgba(255,255,255,0.01);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+/* simple spacer that grows to push copy to the right on wide screens */
+.footer-spacer { flex: 1 1 auto; min-width: 10px; }
+
+/* copyright */
+.footer-copy {
+  color: rgba(158,170,185,0.9);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* Mobile: stack vertically and center */
+@media (max-width: 740px) {
+  .footer-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    padding-bottom: 6px;
+  }
+  .footer-spacer { display: none; }
+  .footer-links { gap: 10px; }
+  .footer-links a { padding: 6px 6px; }
+}
+
+/* Accessibility focus ring */
+.footer-links a:focus {
+  box-shadow: 0 0 0 3px rgba(78,163,255,0.12);
+  border-radius: 6px;
+}
+
+/* Optional: if you want the footer to be slightly subdued (lower contrast), uncomment */
+/* .site-footer { opacity: 0.95; } */
